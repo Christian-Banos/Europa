@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍 Mi Súper Libro de Europa</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #003399;
+    --azul-claro: #1a4fd6;
+    --dorado: #FFCC00;
+    --dorado-oscuro: #e6b800;
+    --blanco: #FFFFFF;
+    --gris-claro: #f0f4ff;
+    --gris: #e2e8f0;
+    --texto: #1a202c;
+    --texto-suave: #4a5568;
+    --verde: #27ae60;
+    --rojo: #e74c3c;
+    --naranja: #f39c12;
+    --morado: #8e44ad;
+    --rosa: #e91e63;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f4ff;
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--azul) 0%, #001a66 60%, #000d40 100%);
+    color: white;
+    text-align: center;
+    padding: 60px 20px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,204,0,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(26,79,214,0.3) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .stars-ring {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 28px;
+    margin-bottom: 16px;
+    animation: spin-slow 30s linear infinite;
+  }
+  @keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    color: var(--dorado);
+    text-shadow: 0 2px 20px rgba(255,204,0,0.3);
+  }
+  .hero p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    max-width: 550px;
+    margin: 0 auto;
+    font-weight: 600;
+  }
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,204,0,0.15);
+    border: 1.5px solid rgba(255,204,0,0.4);
+    color: var(--dorado);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* NAV */
+  nav {
+    background: white;
+    border-bottom: 3px solid var(--dorado);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,51,153,0.12);
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 20px;
+    overflow-x: auto;
+  }
+  nav a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: var(--azul);
+    font-weight: 700;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+  }
+  nav a:hover {
+    color: var(--azul-claro);
+    border-bottom-color: var(--dorado);
+  }
+
+  /* SECTIONS */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--azul);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-subtitle {
+    color: var(--texto-suave);
+    margin-bottom: 36px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .section-divider {
+    height: 4px;
+    width: 60px;
+    background: var(--dorado);
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  /* MAP SECTION */
+  #mapa {
+    background: white;
+    padding: 40px 20px 60px;
+    max-width: 100%;
+  }
+  .map-container-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .map-title-area {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .map-title-area .section-divider { margin: 0 auto 12px; }
+  .map-title-area .section-title { justify-content: center; }
+
+  #eu-map-svg-container {
+    background: linear-gradient(160deg, #dbeafe 0%, #e0f2fe 100%);
+    border-radius: 20px;
+    border: 2px solid var(--gris);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,51,153,0.10);
+    cursor: grab;
+  }
+  #eu-map-svg-container:active { cursor: grabbing; }
+  #eu-map-svg-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+  }
+  .country-path {
+    fill: #4a90d9;
+    stroke: white;
+    stroke-width: 1.5px;
+    cursor: pointer;
+    transition: fill 0.2s, transform 0.1s;
+    transform-origin: center;
+  }
+  .country-path:hover {
+    fill: var(--azul);
+  }
+  .country-path.active {
+    fill: var(--dorado-oscuro);
+  }
+  .country-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    fill: white;
+    text-anchor: middle;
+    pointer-events: none;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    paint-order: stroke;
+    stroke: rgba(0,51,153,0.8);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+
+  .map-tooltip {
+    position: fixed;
+    background: var(--azul);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    border: 2px solid var(--dorado);
+    display: none;
+    transform: translateY(-100%) translateX(-50%);
+    margin-top: -10px;
+    white-space: nowrap;
+  }
+  .map-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--dorado);
+  }
+  .map-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-suave);
+  }
+  .legend-color {
+    width: 20px;
+    height: 14px;
+    border-radius: 4px;
+  }
+  .map-hint {
+    text-align: center;
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,51,153,0.07);
+    border: 1.5px solid var(--gris);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,51,153,0.13);
+  }
+  .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--azul);
+    margin-bottom: 8px;
+  }
+  .card p, .card li {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--texto-suave);
+  }
+  .card ul { padding-left: 16px; }
+  .card li { margin-bottom: 4px; }
+  .card-accent {
+    border-top: 4px solid var(--dorado);
+  }
+  .card-azul { border-top: 4px solid var(--azul); }
+  .card-verde { border-top: 4px solid var(--verde); }
+  .card-naranja { border-top: 4px solid var(--naranja); }
+  .card-morado { border-top: 4px solid var(--morado); }
+  .card-rosa { border-top: 4px solid var(--rosa); }
+  .card-rojo { border-top: 4px solid var(--rojo); }
+
+  /* PIE CHART ECONOMY */
+  .economy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .economy-grid { grid-template-columns: 1fr; } }
+  .pie-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .pie-chart-svg {
+    width: 220px;
+    height: 220px;
+    filter: drop-shadow(0 8px 20px rgba(0,51,153,0.2));
+  }
+  .pie-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .pie-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .pie-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .pie-pct {
+    margin-left: auto;
+    background: var(--gris-claro);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--azul);
+    font-weight: 800;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--azul), var(--dorado));
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+    animation: slideIn 0.4s ease both;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -34px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--dorado);
+    border: 3px solid var(--azul);
+  }
+  .timeline-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--azul);
+    font-weight: 700;
+  }
+  .timeline-text {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin-top: 2px;
+    line-height: 1.6;
+  }
+  .timeline-text strong { color: var(--texto); }
+
+  /* INSTITUTIONS */
+  .inst-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .inst-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1.5px solid var(--gris);
+    box-shadow: 0 3px 15px rgba(0,51,153,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .inst-emoji { font-size: 2rem; }
+  .inst-name {
+    font-weight: 800;
+    color: var(--azul);
+    font-size: 0.95rem;
+  }
+  .inst-role {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    line-height: 1.5;
+  }
+  .inst-sede {
+    font-size: 0.78rem;
+    color: var(--azul-claro);
+    font-weight: 700;
+    background: var(--gris-claro);
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  /* VALUES */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .value-card {
+    background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,51,153,0.2);
+    transition: transform 0.2s;
+  }
+  .value-card:hover { transform: translateY(-4px) scale(1.02); }
+  .value-card .v-icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .value-card .v-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
+  .value-card .v-desc { font-size: 0.82rem; opacity: 0.85; line-height: 1.5; }
+
+  /* LOGROS */
+  .logro-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border-left: 6px solid var(--dorado);
+    box-shadow: 0 4px 20px rgba(0,51,153,0.07);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .logro-emoji { font-size: 2.8rem; flex-shrink: 0; }
+  .logro-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--azul);
+    margin-bottom: 8px;
+  }
+  .logro-content p {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    line-height: 1.7;
+  }
+
+  /* QUIZ */
+  .quiz-container {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 6px 30px rgba(0,51,153,0.10);
+    border: 2px solid var(--gris);
+  }
+  .quiz-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--azul);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media(max-width: 500px) { .quiz-options { grid-template-columns: 1fr; } }
+  .quiz-btn {
+    background: var(--gris-claro);
+    border: 2px solid var(--gris);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--texto);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .quiz-btn:hover { background: #dbeafe; border-color: var(--azul-claro); }
+  .quiz-btn.correct { background: #d1fae5; border-color: var(--verde); color: #065f46; }
+  .quiz-btn.wrong { background: #fee2e2; border-color: var(--rojo); color: #7f1d1d; }
+  .quiz-btn:disabled { cursor: default; }
+  .quiz-feedback {
+    text-align: center;
+    font-weight: 800;
+    font-size: 1rem;
+    min-height: 28px;
+    color: var(--azul);
+  }
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .quiz-nav-btn {
+    background: var(--azul);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: background 0.2s;
+  }
+  .quiz-nav-btn:hover { background: var(--azul-claro); }
+  .quiz-score {
+    font-weight: 800;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+  }
+  .quiz-progress {
+    height: 6px;
+    background: var(--gris);
+    border-radius: 3px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .quiz-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--azul), var(--dorado));
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+
+  /* FOOTER */
+  footer {
+    background: linear-gradient(135deg, var(--azul) 0%, #001a66 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 40px;
+  }
+  footer h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--dorado); margin-bottom: 8px; }
+  footer p { opacity: 0.8; font-size: 0.9rem; }
+  footer .eu-flag { font-size: 3rem; margin-bottom: 12px; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+  /* BG SECTIONS */
+  .bg-azul-suave { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+  .bg-blanco { background: white; }
+  .bg-dorado-suave { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--gris-claro); }
+  ::-webkit-scrollbar-thumb { background: var(--azul); border-radius: 4px; }
+
+  /* Tooltip */
+  .info-pill {
+    display: inline-block;
+    background: var(--dorado);
+    color: var(--azul);
+    font-weight: 800;
+    border-radius: 50px;
+    padding: 2px 14px;
+    font-size: 0.85rem;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="stars-ring">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+  <h1>🌍 Mi Súper Libro de Europa</h1>
+  <p>Todo lo que necesitas saber para repasar y sacar un 10 ⭐</p>
+  <div class="hero-badges">
+    <span class="badge">🗺️ Mapa Interactivo</span>
+    <span class="badge">📚 Temario Completo</span>
+    <span class="badge">🧠 Quiz de Repaso</span>
+    <span class="badge">🇪🇺 27 Países</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#mapa">🗺️ Mapa</a></li>
+    <li><a href="#tema1">👥 Europa</a></li>
+    <li><a href="#tema2">💼 Economía</a></li>
+    <li><a href="#tema3">🇪🇺 Unión Europea</a></li>
+    <li><a href="#instituciones">🏛️ Instituciones</a></li>
+    <li><a href="#logros">🏆 Logros</a></li>
+    <li><a href="#quiz">🧠 Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- MAPA INTERACTIVO -->
+<div id="mapa" class="bg-blanco" style="padding: 60px 20px;">
+  <div class="map-container-wrap">
+    <div class="map-title-area">
+      <div class="section-divider"></div>
+      <h2 class="section-title">🗺️ Mapa de la Unión Europea</h2>
+      <p class="section-subtitle">Haz clic en cualquier país para ver su capital 🏛️</p>
+    </div>
+    <div id="eu-map-svg-container">
+      <svg id="eu-svg" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="map-legend">
+      <div class="legend-item"><div class="legend-color" style="background:#4a90d9;"></div>País de la UE (sin seleccionar)</div>
+      <div class="legend-item"><div class="legend-color" style="background:var(--dorado-oscuro);"></div>País seleccionado</div>
+      <div class="legend-item"><div class="legend-color" style="background:#90cdf4;"></div>No pertenece a la UE</div>
+    </div>
+    <p class="map-hint">💡 Haz clic en un país para ver su capital</p>
+  </div>
+</div>
+<div class="map-tooltip" id="map-tooltip"></div>
+
+<!-- TEMA 1 -->
+<div id="tema1" class="bg-azul-suave" style="padding: 60px 20px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">👥 Tema 1: ¿Cómo es nuestro Continente?</h2>
+  <p class="section-subtitle">Tamaño, población, migraciones y dónde vive la gente</p>
+  <div class="cards-grid">
+    <div class="card card-accent">
+      <div class="card-icon">📏</div>
+      <h3>El Tamaño de Europa</h3>
+      <ul>
+        <li>2º continente más <strong>pequeño</strong> del mundo</li>
+        <li>Más de <strong>750 millones</strong> de personas</li>
+        <li><strong>7 países bicontinentales</strong> (un pie en Europa, otro en Asia)</li>
+        <li>Ejemplos: 🇷🇺 Rusia y 🇹🇷 Turquía</li>
+      </ul>
+    </div>
+    <div class="card card-azul">
+      <div class="card-icon">👴</div>
+      <h3>Población: ¡Está Envejeciendo!</h3>
+      <ul>
+        <li>👶 <strong>Baja natalidad:</strong> nacen pocos bebés</li>
+        <li>🧓 <strong>Alta esperanza de vida:</strong> ~75 años de media</li>
+        <li>🐢 <strong>Crecimiento muy lento</strong></li>
+        <li>La mayoría vive en <strong>ciudades</strong> (población urbana)</li>
+      </ul>
+    </div>
+    <div class="card card-verde">
+      <div class="card-icon">🗺️</div>
+      <h3>Densidad de Población</h3>
+      <p>¿Cuánta gente por km²?</p>
+      <ul style="margin-top:8px;">
+        <li>➕ <strong>Mucha gente:</strong> centro y sur — clima suave, industria (ej: Florencia, Italia)</li>
+        <li>➖ <strong>Poca gente:</strong> norte y este — hace frío ❄️ (ej: Reikiavik, Islandia)</li>
+      </ul>
+    </div>
+    <div class="card card-naranja">
+      <div class="card-icon">🚶‍♀️</div>
+      <h3>Migraciones</h3>
+      <ul>
+        <li>📅 <strong>Antes (s. XIX-XX):</strong> europeos emigraban a América</li>
+        <li>📅 <strong>Ahora:</strong> personas de África, Asia y América vienen a Europa</li>
+        <li>👍 Resultado: <strong>gran diversidad cultural</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TEMA 2 -->
+<div id="tema2" class="bg-blanco" style="padding: 60px 20px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">💼 Tema 2: Trabajos y Economía</h2>
+  <p class="section-subtitle">Los 3 sectores de la economía europea</p>
+
+  <div class="economy-grid">
+    <div class="pie-container">
+      <svg class="pie-chart-svg" viewBox="0 0 200 200">
+        <!-- Sector Servicios 76% = 273.6° -->
+        <circle r="90" cx="100" cy="100" fill="none" stroke="#003399" stroke-width="55"
+          stroke-dasharray="452.4 141.4" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+        <!-- Sector Secundario 20% = 72° -->
+        <circle r="90" cx="100" cy="100" fill="none" stroke="#FFCC00" stroke-width="55"
+          stroke-dasharray="113.1 480.7" stroke-dashoffset="-452.4" transform="rotate(-90 100 100)"/>
+        <!-- Sector Primario 4% -->
+        <circle r="90" cx="100" cy="100" fill="none" stroke="#27ae60" stroke-width="55"
+          stroke-dasharray="22.6 571.2" stroke-dashoffset="-565.5" transform="rotate(-90 100 100)"/>
+        <circle r="55" cx="100" cy="100" fill="white"/>
+        <text x="100" y="95" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="13" fill="#003399">Los 3</text>
+        <text x="100" y="113" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="13" fill="#003399">Sectores</text>
+      </svg>
+      <div class="pie-legend">
+        <div class="pie-legend-item"><div class="pie-dot" style="background:#003399;"></div>Servicios<span class="pie-pct">76%</span></div>
+        <div class="pie-legend-item"><div class="pie-dot" style="background:#FFCC00;"></div>Secundario<span class="pie-pct">20%</span></div>
+        <div class="pie-legend-item"><div class="pie-dot" style="background:#27ae60;"></div>Primario<span class="pie-pct">4%</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="card card-verde">
+        <div class="card-icon">🌾</div>
+        <h3>Sector Primario (4%) — "Sacar de la Naturaleza"</h3>
+        <ul>
+          <li>🚜 <strong>Agricultura:</strong> trigo en la Gran Llanura y Ucrania; olivos y vides en el Mediterráneo</li>
+          <li>🐄 <strong>Ganadería:</strong> vacas, ovejas, cerdos — muy fuerte en 🇳🇱 Países Bajos</li>
+          <li>🚢 <strong>Pesca:</strong> España, Rusia y Noruega lideran</li>
+        </ul>
+      </div>
+      <div class="card card-naranja">
+        <div class="card-icon">🏭</div>
+        <h3>Sector Secundario (20%) — "Fabricar Cosas"</h3>
+        <ul>
+          <li>🇩🇪 <strong>Alemania:</strong> potencia en vehículos</li>
+          <li>También: química, farmacéutica, aeronáutica y textil</li>
+          <li>La UE es una <strong>potencia industrial mundial</strong></li>
+        </ul>
+      </div>
+      <div class="card card-azul">
+        <div class="card-icon">🛍️</div>
+        <h3>Sector Servicios (76%) — "Ayudar a los demás"</h3>
+        <ul>
+          <li>🛒 <strong>Comercio:</strong> exporta máquinas y químicos, importa petróleo</li>
+          <li>🚍 <strong>Transporte:</strong> redes modernas de carreteras, puertos y aeropuertos</li>
+          <li>📸 <strong>Turismo:</strong> Europa es el destino nº1 mundial 🏖️🏰</li>
+          <li>🇫🇷🇪🇸🇮🇹 Más visitados: Francia, España, Italia</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TEMA 3 UE -->
+<div id="tema3" class="bg-dorado-suave" style="padding: 60px 20px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">🇪🇺 Tema 3: La Unión Europea</h2>
+  <p class="section-subtitle">¿Qué es, cómo nació y cómo funciona?</p>
+
+  <div class="cards-grid" style="margin-bottom:40px;">
+    <div class="card card-accent">
+      <div class="card-icon">⭐</div>
+      <h3>¿Qué es la UE?</h3>
+      <p>Organización <strong>económica y política</strong> de <strong>27 países</strong> europeos que trabajan juntos para ayudarse y vivir en paz. Su lema: <em>"Unida en la diversidad"</em> 🌍</p>
+    </div>
+    <div class="card card-rojo">
+      <div class="card-icon">❓</div>
+      <h3>¿Cómo se entra?</h3>
+      <ul>
+        <li>🗳️ Ser una <strong>Democracia</strong></li>
+        <li>🕊️ Respetar los <strong>Derechos Humanos</strong></li>
+        <li>💶 Tener una <strong>economía</strong> que funcione</li>
+        <li>⚖️ Aceptar las <strong>Leyes de la UE</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--azul);margin-bottom:24px;">📜 Línea del Tiempo de la UE</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1957</div>
+      <div class="timeline-text">Empieza todo con <strong>6 países</strong>: Francia, Alemania, Italia y el Benelux. Se llama <strong>CEE</strong> (Comunidad Económica Europea).</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1986</div>
+      <div class="timeline-text">🇪🇸 <strong>¡España entra en la UE!</strong> Un momento histórico para nuestro país.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1992</div>
+      <div class="timeline-text">Pasa a llamarse oficialmente <strong>Unión Europea (UE)</strong>.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2002</div>
+      <div class="timeline-text">💶 Empiezan a usarse los <strong>billetes y monedas de Euro (€)</strong>.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2012</div>
+      <div class="timeline-text">🕊️ La UE recibe el <strong>Premio Nobel de la Paz</strong> por décadas de estabilidad y paz en Europa.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2020</div>
+      <div class="timeline-text">🇬🇧 <strong>BREXIT</strong>: El Reino Unido decide irse de la UE. Ahora somos 27.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- INSTITUCIONES -->
+<div id="instituciones" class="bg-blanco" style="padding: 60px 20px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">🏛️ Instituciones de la UE</h2>
+  <p class="section-subtitle">Los "jefes" que hacen funcionar la Unión Europea</p>
+  <div class="inst-grid">
+    <div class="inst-card">
+      <div class="inst-emoji">🗳️</div>
+      <div class="inst-name">Parlamento Europeo</div>
+      <div class="inst-role">Hace las leyes y el presupuesto. Lo eligen los ciudadanos europeos directamente.</div>
+      <div class="inst-sede">📍 Estrasburgo, Bruselas, Luxemburgo</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-emoji">🤝</div>
+      <div class="inst-name">Consejo Europeo</div>
+      <div class="inst-role">Los líderes de los países se reúnen para decidir los grandes objetivos y la dirección de la UE.</div>
+      <div class="inst-sede">📍 Bruselas</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-emoji">🏢</div>
+      <div class="inst-name">Comisión Europea</div>
+      <div class="inst-role">El "gobierno" de la UE. Propone las leyes y vigila que se cumplan en todos los países.</div>
+      <div class="inst-sede">📍 Bruselas</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-emoji">👩‍⚖️</div>
+      <div class="inst-name">Tribunal de Justicia</div>
+      <div class="inst-role">Garantiza que las leyes de la UE se apliquen igual en todos los países miembros.</div>
+      <div class="inst-sede">📍 Luxemburgo</div>
+    </div>
+    <div class="inst-card">
+      <div class="inst-emoji">💶</div>
+      <div class="inst-name">Banco Central Europeo</div>
+      <div class="inst-role">Se encarga del Euro €. Controla la inflación y la política monetaria. Presidenta: Christine Lagarde 👩‍💼</div>
+      <div class="inst-sede">📍 Fráncfort</div>
+    </div>
+  </div>
+
+  <!-- VALORES -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--azul);margin:40px 0 20px;">💖 Valores de la UE</h3>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="v-icon">🛡️</div>
+      <div class="v-title">Dignidad</div>
+      <div class="v-desc">Prohibido el maltrato. Toda persona merece respeto.</div>
+    </div>
+    <div class="value-card">
+      <div class="v-icon">🕊️</div>
+      <div class="v-title">Libertad</div>
+      <div class="v-desc">Vivir, moverse y trabajar donde quieras dentro de la UE.</div>
+    </div>
+    <div class="value-card">
+      <div class="v-icon">🗳️</div>
+      <div class="v-title">Democracia</div>
+      <div class="v-desc">Derecho a votar y elegir a tus representantes.</div>
+    </div>
+    <div class="value-card">
+      <div class="v-icon">⚖️</div>
+      <div class="v-title">Igualdad</div>
+      <div class="v-desc">Mismos derechos para todos, sin importar sexo, religión o país.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- LOGROS -->
+<div id="logros" class="bg-azul-suave" style="padding: 60px 20px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">🏆 Los Grandes Logros de la UE</h2>
+  <p class="section-subtitle">Las cosas geniales que hemos conseguido trabajando juntos</p>
+
+  <div class="logro-card">
+    <div class="logro-emoji">🗳️</div>
+    <div class="logro-content">
+      <h3>1. Ciudadanía Europea — "El Superpasaporte"</h3>
+      <p>Todos los que vivimos en la UE tenemos <strong>Ciudadanía Europea</strong>. Puedes ir a vivir, estudiar o trabajar a Francia, Alemania o Italia sin permisos especiales. ¡Los mismos derechos que la gente de allí!</p>
+    </div>
+  </div>
+
+  <div class="logro-card" style="border-left-color: var(--azul);">
+    <div class="logro-emoji">💶</div>
+    <div class="logro-content">
+      <h3>2. Mercado y Euro — "La Cartera Única"</h3>
+      <p><strong>Mercado Único:</strong> los países venden productos entre ellos sin impuestos de aduana. <strong>El Euro (€)</strong> se usa en 20 países: no necesitas cambiar dinero cuando viajas. ¡Cómodo para viajar y comprar por internet!</p>
+    </div>
+  </div>
+
+  <div class="logro-card" style="border-left-color: var(--verde);">
+    <div class="logro-emoji">🤝</div>
+    <div class="logro-content">
+      <h3>3. Logros Sociales — "El Equipo de la Igualdad"</h3>
+      <p>La UE lucha para que <strong>hombres y mujeres cobren lo mismo</strong>. Pone reglas para <strong>cuidar el medioambiente</strong> (ríos, bosques, aire). Y el <strong>programa Erasmus</strong> ayuda a miles de estudiantes a ir a universidades de otros países. 🎓</p>
+    </div>
+  </div>
+
+  <div class="logro-card" style="border-left-color: var(--morado);">
+    <div class="logro-emoji">🕊️</div>
+    <div class="logro-content">
+      <h3>4. Premio Nobel de la Paz 2012 — "Cero Guerras"</h3>
+      <p>Antes en Europa siempre había guerras terribles (Primera y Segunda Guerra Mundial). Gracias a la UE, los países <strong>se sientan a hablar en vez de pelearse</strong>. ¡Llevamos muchos años en paz! Por eso la UE recibió el <strong>Premio Nobel de la Paz en 2012</strong>. 🏅</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="bg-blanco" style="padding: 60px 20px;">
+<div style="max-width: 700px; margin: 0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">🧠 Quiz de Repaso</h2>
+  <p class="section-subtitle">¡Pon a prueba lo que has aprendido! Pregunta <span id="q-num">1</span> de <span id="q-total">10</span></p>
+  <div class="quiz-container">
+    <div class="quiz-progress"><div class="quiz-progress-bar" id="quiz-bar" style="width:10%;"></div></div>
+    <div class="quiz-question" id="quiz-question">Cargando...</div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <div class="quiz-nav">
+      <div class="quiz-score">⭐ Puntos: <span id="quiz-pts">0</span></div>
+      <button class="quiz-nav-btn" id="quiz-next" style="display:none;" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="eu-flag">🇪🇺</div>
+  <h2>¡Mucho ánimo en el examen!</h2>
+  <p>Unida en la diversidad · 27 países · 750 millones de personas</p>
+  <p style="margin-top:12px; opacity:0.5; font-size:0.78rem;">Basado en el temario de Geografía e Historia · Europa y la Unión Europea</p>
+</footer>
+
+<script>
+// ===== MAPA DE LA UNIÓN EUROPEA =====
+const euCountries = [
+  { id: "DE", name: "Alemania", capital: "Berlín 🏙️", eu: true,
+    d: "M 455 195 L 465 185 L 475 190 L 485 180 L 490 195 L 485 210 L 490 220 L 480 230 L 475 240 L 465 235 L 460 225 L 450 220 L 445 210 Z" },
+  { id: "FR", name: "Francia", capital: "París 🗼", eu: true,
+    d: "M 355 250 L 370 240 L 385 245 L 395 240 L 410 250 L 415 260 L 420 275 L 415 290 L 410 305 L 395 310 L 380 315 L 365 310 L 350 305 L 345 290 L 340 275 L 345 260 Z" },
+  { id: "ES", name: "España", capital: "Madrid 🌞", eu: true,
+    d: "M 310 335 L 325 325 L 345 320 L 365 315 L 385 320 L 405 315 L 420 320 L 430 330 L 430 345 L 425 360 L 415 370 L 400 378 L 380 382 L 360 380 L 340 375 L 320 365 L 305 355 L 300 345 Z" },
+  { id: "IT", name: "Italia", capital: "Roma 🏛️", eu: true,
+    d: "M 445 295 L 455 285 L 465 290 L 475 300 L 480 315 L 478 330 L 472 345 L 465 360 L 460 375 L 455 390 L 448 398 L 443 385 L 440 370 L 438 355 L 440 340 L 442 325 L 440 310 Z" },
+  { id: "PL", name: "Polonia", capital: "Varsovia 🦅", eu: true,
+    d: "M 490 165 L 505 160 L 520 158 L 535 162 L 548 168 L 555 180 L 553 195 L 545 205 L 530 210 L 515 208 L 500 205 L 488 198 L 485 185 Z" },
+  { id: "SE", name: "Suecia", capital: "Estocolmo ❄️", eu: true,
+    d: "M 490 80 L 500 70 L 512 65 L 522 72 L 525 88 L 520 105 L 515 122 L 510 140 L 505 155 L 498 162 L 490 155 L 485 140 L 482 122 L 480 105 L 482 88 Z" },
+  { id: "FI", name: "Finlandia", capital: "Helsinki 🎿", eu: true,
+    d: "M 530 65 L 545 58 L 562 55 L 575 62 L 582 78 L 580 95 L 575 112 L 568 128 L 558 138 L 548 135 L 538 125 L 530 112 L 525 95 L 522 78 Z" },
+  { id: "DK", name: "Dinamarca", capital: "Copenhague 🧜", eu: true,
+    d: "M 465 150 L 472 142 L 480 140 L 486 148 L 488 160 L 484 170 L 476 172 L 468 168 L 462 158 Z" },
+  { id: "NL", name: "Países Bajos", capital: "Ámsterdam 🌷", eu: true,
+    d: "M 418 185 L 428 178 L 440 180 L 447 190 L 445 202 L 435 208 L 424 205 L 415 198 Z" },
+  { id: "BE", name: "Bélgica", capital: "Bruselas 🍟", eu: true,
+    d: "M 408 210 L 418 205 L 430 208 L 438 218 L 435 228 L 424 232 L 412 228 L 405 220 Z" },
+  { id: "AT", name: "Austria", capital: "Viena 🎶", eu: true,
+    d: "M 468 238 L 480 232 L 494 235 L 505 240 L 510 250 L 505 260 L 492 265 L 478 263 L 465 258 L 460 248 Z" },
+  { id: "CZ", name: "Rep. Checa", capital: "Praga 🍺", eu: true,
+    d: "M 468 212 L 480 208 L 494 210 L 505 218 L 508 228 L 500 236 L 487 238 L 473 236 L 462 228 L 462 218 Z" },
+  { id: "SK", name: "Eslovaquia", capital: "Bratislava 🏰", eu: true,
+    d: "M 505 220 L 518 215 L 530 218 L 540 225 L 542 235 L 533 242 L 520 244 L 508 240 L 502 232 Z" },
+  { id: "HU", name: "Hungría", capital: "Budapest 🌊", eu: true,
+    d: "M 505 248 L 520 244 L 535 248 L 548 255 L 550 268 L 542 278 L 528 280 L 512 277 L 500 268 L 498 258 Z" },
+  { id: "RO", name: "Rumanía", capital: "Bucarest 🌻", eu: true,
+    d: "M 545 238 L 562 232 L 578 235 L 590 245 L 595 260 L 590 275 L 578 283 L 562 285 L 548 280 L 538 268 L 537 255 Z" },
+  { id: "BG", name: "Bulgaria", capital: "Sofía 🌹", eu: true,
+    d: "M 545 288 L 562 284 L 578 287 L 590 297 L 592 310 L 582 318 L 565 320 L 550 316 L 538 308 L 537 298 Z" },
+  { id: "GR", name: "Grecia", capital: "Atenas 🏛️", eu: true,
+    d: "M 520 330 L 535 325 L 548 328 L 558 338 L 560 352 L 553 362 L 540 366 L 525 363 L 515 353 L 514 340 Z" },
+  { id: "PT", name: "Portugal", capital: "Lisboa 🐟", eu: true,
+    d: "M 290 330 L 300 320 L 310 325 L 315 338 L 312 352 L 305 360 L 295 358 L 285 350 L 283 338 Z" },
+  { id: "IE", name: "Irlanda", capital: "Dublín ☘️", eu: true,
+    d: "M 305 185 L 316 180 L 326 185 L 330 198 L 326 210 L 315 215 L 304 210 L 298 198 Z" },
+  { id: "LU", name: "Luxemburgo", capital: "Luxemburgo 🏦", eu: true,
+    d: "M 420 228 L 426 224 L 432 227 L 434 234 L 430 240 L 422 239 L 417 234 Z" },
+  { id: "HR", name: "Croacia", capital: "Zagreb 🌊", eu: true,
+    d: "M 485 275 L 498 270 L 512 273 L 520 282 L 518 295 L 505 300 L 490 297 L 480 288 Z" },
+  { id: "SI", name: "Eslovenia", capital: "Liubliana 🦂", eu: true,
+    d: "M 468 263 L 480 260 L 492 263 L 498 272 L 492 280 L 478 282 L 465 277 Z" },
+  { id: "EE", name: "Estonia", capital: "Tallin 🦢", eu: true,
+    d: "M 545 128 L 558 124 L 570 127 L 576 137 L 572 148 L 560 152 L 547 149 L 540 140 Z" },
+  { id: "LV", name: "Letonia", capital: "Riga 🌿", eu: true,
+    d: "M 540 150 L 555 147 L 568 150 L 576 160 L 574 172 L 562 177 L 547 174 L 538 165 Z" },
+  { id: "LT", name: "Lituania", capital: "Vilna 🌙", eu: true,
+    d: "M 530 172 L 548 168 L 562 172 L 568 183 L 563 195 L 548 200 L 532 197 L 522 188 Z" },
+  { id: "CY", name: "Chipre", capital: "Nicosia ☀️", eu: true,
+    d: "M 600 360 L 614 356 L 624 360 L 626 370 L 618 376 L 604 374 L 596 367 Z" },
+  { id: "MT", name: "Malta", capital: "La Valeta 🌊", eu: true,
+    d: "M 450 410 L 458 407 L 464 411 L 464 418 L 456 422 L 448 418 Z" },
+];
+
+// Non-EU nearby countries
+const nonEuCountries = [
+  { id: "GB", name: "Reino Unido", capital: "Londres (ex-UE) 🇬🇧", eu: false,
+    d: "M 330 185 L 342 178 L 355 180 L 362 192 L 358 206 L 345 212 L 332 208 L 324 196 Z" },
+  { id: "NO", name: "Noruega", capital: "Oslo 🏔️", eu: false,
+    d: "M 430 95 L 445 82 L 460 78 L 472 85 L 475 100 L 468 115 L 455 125 L 440 122 L 428 112 Z" },
+  { id: "CH", name: "Suiza", capital: "Berna 🧀", eu: false,
+    d: "M 428 258 L 440 252 L 454 255 L 460 265 L 455 275 L 441 278 L 427 273 L 422 264 Z" },
+  { id: "UA", name: "Ucrania", capital: "Kiev 🌻", eu: false,
+    d: "M 555 205 L 578 198 L 600 200 L 618 210 L 622 228 L 615 245 L 598 252 L 578 250 L 558 242 L 548 228 Z" },
+  { id: "TR", name: "Turquía", capital: "Ankara 🕌", eu: false,
+    d: "M 590 320 L 615 312 L 640 315 L 658 325 L 662 340 L 650 352 L 630 358 L 608 355 L 590 345 L 582 333 Z" },
+  { id: "RS", name: "Serbia", capital: "Belgrado 🎺", eu: false,
+    d: "M 505 305 L 520 300 L 532 305 L 538 318 L 532 330 L 518 333 L 505 328 L 496 317 Z" },
+];
+
+const svg = document.getElementById('eu-svg');
+const tooltip = document.getElementById('map-tooltip');
+let activeCountry = null;
+
+function buildMap() {
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  defs.innerHTML = `<filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>`;
+  svg.appendChild(defs);
+
+  // Ocean bg
+  const ocean = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  ocean.setAttribute('width', '900');
+  ocean.setAttribute('height', '700');
+  ocean.setAttribute('fill', '#bfdbfe');
+  ocean.setAttribute('rx', '18');
+  svg.appendChild(ocean);
+
+  // Draw all countries
+  const allCountries = [...euCountries, ...nonEuCountries];
+
+  allCountries.forEach(c => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', c.d);
+    path.setAttribute('class', 'country-path');
+    if (!c.eu) path.style.fill = '#90cdf4';
+    path.setAttribute('filter', 'url(#shadow)');
+    path.dataset.id = c.id;
+    path.dataset.name = c.name;
+    path.dataset.capital = c.capital;
+    path.dataset.eu = c.eu;
+
+    // Tooltip and click
+    path.addEventListener('mouseenter', (e) => showTooltip(e, c));
+    path.addEventListener('mouseleave', hideTooltip);
+    path.addEventListener('mousemove', moveTooltip);
+    path.addEventListener('click', () => clickCountry(path, c));
+
+    // Label
+    const bbox = getPathCenter(c.d);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', bbox.x);
+    text.setAttribute('y', bbox.y);
+    text.setAttribute('class', 'country-label');
+    text.textContent = c.name.length > 10 ? abbreviate(c.name) : c.name;
+
+    g.appendChild(path);
+    g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+function abbreviate(name) {
+  const map = {
+    'Países Bajos': 'P. Bajos',
+    'Rep. Checa': 'Rep.\nCheca',
+    'Eslovaquia': 'Eslovaq.',
+    'Eslovenia': 'Esloven.',
+    'Reino Unido': 'R. Unido',
+    'Noruega': 'Noruega',
+    'Rumanía': 'Rumanía',
+    'Bulgaria': 'Bulgaria',
+    'Ucrania': 'Ucrania',
+    'Croacia': 'Croacia',
+    'Lituania': 'Lituania',
+    'Finlandia': 'Finlandia',
+    'Dinamarca': 'Dinamarca',
+    'Luxemburgo': 'Lux.',
+    'Portugal': 'Portugal',
+  };
+  return map[name] || name;
+}
+
+function getPathCenter(d) {
+  // Parse path commands to get rough centroid
+  const nums = d.match(/[\d.]+/g).map(Number);
+  let xs = [], ys = [];
+  for (let i = 0; i < nums.length; i += 2) {
+    xs.push(nums[i]);
+    if (nums[i+1] !== undefined) ys.push(nums[i+1]);
+  }
+  const cx = xs.reduce((a,b) => a+b, 0) / xs.length;
+  const cy = ys.reduce((a,b) => a+b, 0) / ys.length;
+  return { x: cx, y: cy };
+}
+
+function showTooltip(e, c) {
+  tooltip.style.display = 'block';
+  moveTooltip(e);
+}
+
+function hideTooltip() {
+  if (!activeCountry) tooltip.style.display = 'none';
+}
+
+function moveTooltip(e) {
+  tooltip.style.left = e.clientX + 'px';
+  tooltip.style.top = (e.clientY - 14) + 'px';
+}
+
+function clickCountry(path, c) {
+  // Reset all
+  document.querySelectorAll('.country-path').forEach(p => {
+    p.classList.remove('active');
+    if (p.dataset.eu === 'true') p.style.fill = '';
+    else p.style.fill = '#90cdf4';
+  });
+
+  path.classList.add('active');
+  activeCountry = c;
+
+  tooltip.style.display = 'block';
+  tooltip.innerHTML = `<strong>${c.name}</strong> 🏛️ ${c.capital}${c.eu ? ' <small style="opacity:0.7">(UE)</small>' : ' <small style="opacity:0.7">(No UE)</small>'}`;
+}
+
+// Click outside
+document.getElementById('eu-svg').addEventListener('click', (e) => {
+  if (e.target === svg || e.target.tagName === 'rect') {
+    document.querySelectorAll('.country-path').forEach(p => {
+      p.classList.remove('active');
+      if (p.dataset.eu === 'true') p.style.fill = '';
+      else p.style.fill = '#90cdf4';
+    });
+    activeCountry = null;
+    tooltip.style.display = 'none';
+  }
+});
+
+buildMap();
+
+// ===== QUIZ =====
+const quizData = [
+  { q: "¿Cuántos países forman actualmente la Unión Europea?", opts: ["25","27","28","30"], ans: 1 },
+  { q: "¿En qué año entró España en la Unión Europea?", opts: ["1957","1992","1986","2002"], ans: 2 },
+  { q: "¿Cuál es el lema de la Unión Europea?", opts: ["Paz y prosperidad","Unida en la diversidad","Libertad e igualdad","Juntos somos más"], ans: 1 },
+  { q: "¿Qué sector económico ocupa el 76% del empleo en Europa?", opts: ["Primario","Secundario","Servicios","Industria"], ans: 2 },
+  { q: "¿Qué país de la UE destaca por fabricar vehículos?", opts: ["Francia","España","Italia","Alemania"], ans: 3 },
+  { q: "¿En qué año empezó a usarse el Euro como moneda?", opts: ["1992","1999","2002","2004"], ans: 2 },
+  { q: "¿Qué institución de la UE propone las leyes y vigila que se cumplan?", opts: ["Parlamento Europeo","Consejo Europeo","Comisión Europea","Tribunal de Justicia"], ans: 2 },
+  { q: "¿En qué año recibió la UE el Premio Nobel de la Paz?", opts: ["2004","2008","2010","2012"], ans: 3 },
+  { q: "¿Qué fue el BREXIT?", opts: ["La entrada de España en la UE","La creación del Euro","La salida del Reino Unido de la UE","Una nueva constitución europea"], ans: 2 },
+  { q: "¿Cuál es el país de la UE más visitado por turistas?", opts: ["España","Italia","Alemania","Francia"], ans: 3 },
+];
+
+let currentQ = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  const q = quizData[currentQ];
+  document.getElementById('q-num').textContent = currentQ + 1;
+  document.getElementById('q-total').textContent = quizData.length;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-bar').style.width = ((currentQ / quizData.length) * 100) + '%';
+  answered = false;
+
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i, btn);
+    opts.appendChild(btn);
+  });
+}
+
+function selectAnswer(i, btn) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[currentQ];
+  const btns = document.querySelectorAll('.quiz-btn');
+  btns.forEach(b => b.disabled = true);
+  if (i === q.ans) {
+    btn.classList.add('correct');
+    score++;
+    document.getElementById('quiz-pts').textContent = score;
+    document.getElementById('quiz-feedback').textContent = '✅ ¡Correcto! ¡Genial!';
+    document.getElementById('quiz-feedback').style.color = 'var(--verde)';
+  } else {
+    btn.classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    document.getElementById('quiz-feedback').textContent = `❌ Era: ${q.opts[q.ans]}`;
+    document.getElementById('quiz-feedback').style.color = 'var(--rojo)';
+  }
+  document.getElementById('quiz-next').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= quizData.length) {
+    document.getElementById('quiz-bar').style.width = '100%';
+    const pct = Math.round((score / quizData.length) * 100);
+    let emoji = pct >= 80 ? '🏆' : pct >= 60 ? '⭐' : '💪';
+    document.getElementById('quiz-question').textContent = `${emoji} ¡Has terminado! Puntuación: ${score}/${quizData.length} (${pct}%)`;
+    document.getElementById('quiz-options').innerHTML = '';
+    document.getElementById('quiz-feedback').textContent = pct >= 80 ? '¡Sobresaliente! Estás listo para el examen 🎉' : pct >= 60 ? '¡Bien! Repasa los puntos fallados 📚' : '¡Ánimo! Vuelve a estudiar y repite 💪';
+    document.getElementById('quiz-feedback').style.color = 'var(--azul)';
+    document.getElementById('quiz-next').textContent = '🔄 Repetir Quiz';
+    document.getElementById('quiz-next').style.display = 'inline-block';
+    document.getElementById('quiz-next').onclick = () => { currentQ = 0; score = 0; document.getElementById('quiz-pts').textContent = 0; document.getElementById('quiz-next').textContent = 'Siguiente →'; document.getElementById('quiz-next').onclick = nextQuestion; loadQuestion(); };
+    return;
+  }
+  loadQuestion();
+}
+
+loadQuestion();
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
