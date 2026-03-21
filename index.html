@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌍 Mi Súper Libro de Europa - Nhoa</title>
+<title>🌍 Mi Súper Libro de Europa</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -643,6 +643,7 @@
     <li><a href="#instituciones">🏛️ Instituciones</a></li>
     <li><a href="#logros">🏆 Logros</a></li>
     <li><a href="#quiz">🧠 Quiz</a></li>
+    <li><a href="#quiz-capitales">🏛️ Capitales</a></li>
   </ul>
 </nav>
 
@@ -962,6 +963,36 @@
 </div>
 </div>
 
+<!-- QUIZ CAPITALES -->
+<div id="quiz-capitales" class="bg-azul-suave" style="padding: 60px 20px;">
+<div style="max-width: 700px; margin: 0 auto;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">🏛️ Quiz de Capitales de la UE</h2>
+  <p class="section-subtitle">¿Sabes la capital de todos los países? Pregunta <span id="cap-num">1</span> de <span id="cap-total">27</span></p>
+  <div class="quiz-container" style="border-top: 4px solid var(--dorado);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--texto-suave);">
+        🟢 <span id="cap-correctas">0</span> correctas &nbsp;|&nbsp; 🔴 <span id="cap-incorrectas">0</span> incorrectas
+      </div>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--azul);">
+        🏆 Récord: <span id="cap-record">0</span>/27
+      </div>
+    </div>
+    <div class="quiz-progress"><div class="quiz-progress-bar" id="cap-bar" style="width:3.7%;"></div></div>
+    <div style="text-align:center;margin-bottom:18px;">
+      <span id="cap-bandera" style="font-size:3.5rem;display:block;line-height:1;margin-bottom:6px;"></span>
+      <div class="quiz-question" id="cap-question" style="font-size:1.15rem;">Cargando...</div>
+    </div>
+    <div class="quiz-options" id="cap-options" style="grid-template-columns: 1fr 1fr;"></div>
+    <div class="quiz-feedback" id="cap-feedback"></div>
+    <div class="quiz-nav">
+      <div class="quiz-score" style="font-size:0.82rem;">⭐ Puntos: <span id="cap-pts">0</span></div>
+      <button class="quiz-nav-btn" id="cap-next" style="display:none;background:var(--dorado-oscuro);color:var(--azul);" onclick="capNext()">Siguiente →</button>
+    </div>
+  </div>
+</div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="eu-flag">🇪🇺</div>
@@ -1254,7 +1285,143 @@ function nextQuestion() {
 
 loadQuestion();
 
-// Smooth scroll
+// ===== QUIZ DE CAPITALES =====
+const capitalesData = [
+  { pais: "Alemania", bandera: "🇩🇪", capital: "Berlín" },
+  { pais: "Francia", bandera: "🇫🇷", capital: "París" },
+  { pais: "España", bandera: "🇪🇸", capital: "Madrid" },
+  { pais: "Italia", bandera: "🇮🇹", capital: "Roma" },
+  { pais: "Polonia", bandera: "🇵🇱", capital: "Varsovia" },
+  { pais: "Suecia", bandera: "🇸🇪", capital: "Estocolmo" },
+  { pais: "Finlandia", bandera: "🇫🇮", capital: "Helsinki" },
+  { pais: "Dinamarca", bandera: "🇩🇰", capital: "Copenhague" },
+  { pais: "Países Bajos", bandera: "🇳🇱", capital: "Ámsterdam" },
+  { pais: "Bélgica", bandera: "🇧🇪", capital: "Bruselas" },
+  { pais: "Austria", bandera: "🇦🇹", capital: "Viena" },
+  { pais: "Rep. Checa", bandera: "🇨🇿", capital: "Praga" },
+  { pais: "Eslovaquia", bandera: "🇸🇰", capital: "Bratislava" },
+  { pais: "Hungría", bandera: "🇭🇺", capital: "Budapest" },
+  { pais: "Rumanía", bandera: "🇷🇴", capital: "Bucarest" },
+  { pais: "Bulgaria", bandera: "🇧🇬", capital: "Sofía" },
+  { pais: "Grecia", bandera: "🇬🇷", capital: "Atenas" },
+  { pais: "Portugal", bandera: "🇵🇹", capital: "Lisboa" },
+  { pais: "Irlanda", bandera: "🇮🇪", capital: "Dublín" },
+  { pais: "Luxemburgo", bandera: "🇱🇺", capital: "Luxemburgo" },
+  { pais: "Croacia", bandera: "🇭🇷", capital: "Zagreb" },
+  { pais: "Eslovenia", bandera: "🇸🇮", capital: "Liubliana" },
+  { pais: "Estonia", bandera: "🇪🇪", capital: "Tallin" },
+  { pais: "Letonia", bandera: "🇱🇻", capital: "Riga" },
+  { pais: "Lituania", bandera: "🇱🇹", capital: "Vilna" },
+  { pais: "Chipre", bandera: "🇨🇾", capital: "Nicosia" },
+  { pais: "Malta", bandera: "🇲🇹", capital: "La Valeta" },
+];
+
+// Shuffle helper
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let capQueue = shuffle([...capitalesData]);
+let capIndex = 0, capScore = 0, capCorrect = 0, capWrong = 0, capAnswered = false;
+let capRecord = 0;
+
+function capGetWrongOptions(correct) {
+  const others = capitalesData.filter(c => c.capital !== correct);
+  return shuffle(others).slice(0, 3).map(c => c.capital);
+}
+
+function capLoad() {
+  if (capIndex >= capQueue.length) { capEnd(); return; }
+  const item = capQueue[capIndex];
+  document.getElementById('cap-num').textContent = capIndex + 1;
+  document.getElementById('cap-total').textContent = capQueue.length;
+  document.getElementById('cap-bandera').textContent = item.bandera;
+  document.getElementById('cap-question').textContent = `¿Cuál es la capital de ${item.pais}?`;
+  document.getElementById('cap-feedback').textContent = '';
+  document.getElementById('cap-next').style.display = 'none';
+  document.getElementById('cap-bar').style.width = ((capIndex / capQueue.length) * 100) + '%';
+  capAnswered = false;
+
+  const opts = shuffle([item.capital, ...capGetWrongOptions(item.capital)]);
+  const container = document.getElementById('cap-options');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-btn';
+    btn.textContent = opt;
+    btn.onclick = () => capSelect(opt, btn, item.capital);
+    container.appendChild(btn);
+  });
+}
+
+function capSelect(chosen, btn, correct) {
+  if (capAnswered) return;
+  capAnswered = true;
+  const btns = document.querySelectorAll('#cap-options .quiz-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    capScore++;
+    capCorrect++;
+    document.getElementById('cap-pts').textContent = capScore;
+    document.getElementById('cap-correctas').textContent = capCorrect;
+    document.getElementById('cap-feedback').textContent = '✅ ¡Correcto! ¡Muy bien!';
+    document.getElementById('cap-feedback').style.color = 'var(--verde)';
+  } else {
+    btn.classList.add('wrong');
+    capWrong++;
+    document.getElementById('cap-incorrectas').textContent = capWrong;
+    document.getElementById('cap-feedback').textContent = `❌ La capital era: ${correct}`;
+    document.getElementById('cap-feedback').style.color = 'var(--rojo)';
+  }
+  document.getElementById('cap-next').style.display = 'inline-block';
+}
+
+function capNext() {
+  capIndex++;
+  capLoad();
+}
+
+function capEnd() {
+  document.getElementById('cap-bar').style.width = '100%';
+  const pct = Math.round((capScore / capitalesData.length) * 100);
+  if (capScore > capRecord) {
+    capRecord = capScore;
+    document.getElementById('cap-record').textContent = capRecord + '/27';
+  }
+  let emoji = pct >= 85 ? '🏆' : pct >= 60 ? '⭐' : '💪';
+  let msg = pct >= 85 ? '¡Sobresaliente! ¡Te sabes todas las capitales! 🎉' : pct >= 60 ? '¡Bien! Repasa las que fallaste 📚' : '¡Ánimo! Vuelve al mapa y repasa 🗺️';
+  document.getElementById('cap-bandera').textContent = emoji;
+  document.getElementById('cap-question').textContent = `¡Quiz terminado! ${capScore}/27 capitales correctas (${pct}%)`;
+  document.getElementById('cap-options').innerHTML = '';
+  document.getElementById('cap-feedback').textContent = msg;
+  document.getElementById('cap-feedback').style.color = 'var(--azul)';
+  const btn = document.getElementById('cap-next');
+  btn.textContent = '🔄 Repetir Quiz';
+  btn.style.display = 'inline-block';
+  btn.onclick = () => {
+    capQueue = shuffle([...capitalesData]);
+    capIndex = 0; capScore = 0; capCorrect = 0; capWrong = 0;
+    document.getElementById('cap-pts').textContent = 0;
+    document.getElementById('cap-correctas').textContent = 0;
+    document.getElementById('cap-incorrectas').textContent = 0;
+    btn.textContent = 'Siguiente →';
+    btn.onclick = capNext;
+    capLoad();
+  };
+}
+
+capLoad();
+
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
